@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -32,7 +31,6 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
     private Throwable movieResponseThrowable;
     private MainActivityView mainActivityView;
     private MovieResponseObserver movieResponseObserver;
-    private Observable<Response<MovieResponse>> movieResponseObservable;
 
     public MainActivityPresenterImpl(MainApplication mainApplication) {
 
@@ -49,14 +47,13 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
     public void getUpcomingMovies() {
         Log.v(LOG_TAG, "-> getUpcomingMovies");
 
-        if (movieResponseObservable == null) {
-
-            movieResponseObservable = tmdbApiV3.getUpcomingMovies(BuildConfig.tmdbApiKey);
+        if (movieResponseObserver == null) {
 
             movieResponseObserver = new MovieResponseObserver();
             movieResponseObserver.setHasCompleted(false);
 
-            movieResponseObservable.subscribeOn(Schedulers.io())
+            tmdbApiV3.getUpcomingMovies(BuildConfig.tmdbApiKey)
+                    .subscribeOn(Schedulers.io())
                     .delay(5, TimeUnit.SECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(movieResponseObserver);
