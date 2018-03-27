@@ -49,36 +49,30 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
 
         if (movieResponseObserver == null) {
 
-            movieResponseObserver = new MovieResponseObserver();
-            movieResponseObserver.setHasCompleted(false);
-
-            tmdbApiV3.getUpcomingMovies(BuildConfig.tmdbApiKey)
+            movieResponseObserver = tmdbApiV3.getUpcomingMovies(BuildConfig.tmdbApiKey)
                     .subscribeOn(Schedulers.io())
                     .delay(5, TimeUnit.SECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(movieResponseObserver);
+                    .subscribeWith(new MovieResponseObserver());
 
         } else if (movieResponseObserver.isCompleted()) {
 
             if (movieResponseRetrofit == null)
                 movieResponseObserver.onError(movieResponseThrowable);
-            else
-                movieResponseObserver.onNext(movieResponseRetrofit);
 
-            movieResponseObserver.onComplete();
+            else {
+                movieResponseObserver.onNext(movieResponseRetrofit);
+                movieResponseObserver.onComplete();
+            }
         }
     }
 
     private class MovieResponseObserver extends DisposableObserver<Response<MovieResponse>> {
 
-        private boolean hasCompleted;
+        private boolean completed;
 
         public boolean isCompleted() {
-            return hasCompleted;
-        }
-
-        public void setHasCompleted(boolean hasCompleted) {
-            this.hasCompleted = hasCompleted;
+            return completed;
         }
 
         @Override
@@ -105,6 +99,8 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
             Log.e(LOG_TAG, "-> onError " + e);
 
             movieResponseThrowable = e;
+            completed = true;
+
             mainActivityView.showMoviesList(null);
         }
 
@@ -112,7 +108,7 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
         public void onComplete() {
             Log.v(LOG_TAG, "-> onComplete");
 
-            hasCompleted = true;
+            completed = true;
         }
     }
 }
