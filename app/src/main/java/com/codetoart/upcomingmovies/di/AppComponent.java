@@ -1,4 +1,4 @@
-package com.codetoart.upcomingmovies;
+package com.codetoart.upcomingmovies.di;
 
 import com.codetoart.upcomingmovies.presenter.MainActivityPresenterImpl;
 import com.codetoart.upcomingmovies.view.MainActivity;

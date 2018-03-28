@@ -8,7 +8,9 @@ import com.codetoart.upcomingmovies.view.MainActivityView;
 
 public interface MainActivityPresenter {
 
-    public void setView(MainActivityView mainActivityView);
+    public void attachView(MainActivityView mainActivityView);
 
     public void getUpcomingMovies();
+
+    public void onDestroy();
 }

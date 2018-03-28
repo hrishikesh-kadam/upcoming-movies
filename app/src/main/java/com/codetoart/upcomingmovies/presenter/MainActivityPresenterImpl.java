@@ -34,11 +34,12 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
 
     public MainActivityPresenterImpl(MainApplication mainApplication) {
 
+        Log.v(LOG_TAG, "-> constructor");
         mainApplication.getAppComponent().inject(this);
     }
 
     @Override
-    public void setView(MainActivityView mainActivityView) {
+    public void attachView(MainActivityView mainActivityView) {
 
         this.mainActivityView = mainActivityView;
     }
@@ -65,6 +66,13 @@ public class MainActivityPresenterImpl implements MainActivityPresenter {
                 movieResponseObserver.onComplete();
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.v(LOG_TAG, "-> onDestroy");
+
+        movieResponseObserver.dispose();
     }
 
     private class MovieResponseObserver extends DisposableObserver<Response<MovieResponse>> {

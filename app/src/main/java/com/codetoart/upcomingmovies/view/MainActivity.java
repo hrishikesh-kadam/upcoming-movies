@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         setContentView(R.layout.activity_main);
 
         ((MainApplication) getApplication()).getAppComponent().inject(this);
-        mainActivityPresenter.setView(this);
+        mainActivityPresenter.attachView(this);
 
         getUpcomingMovies();
     }
@@ -49,5 +49,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             Log.e(LOG_TAG, "-> showMoviesList -> Error");
         else
             Log.d(LOG_TAG, "-> showMoviesList -> " + movieResponseRetrofit.body());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v(LOG_TAG, "-> onDestroy");
+
+        if (isFinishing()) {
+            Log.d(LOG_TAG, "-> onDestroy -> isFinishing");
+
+            mainActivityPresenter.onDestroy();
+        }
     }
 }

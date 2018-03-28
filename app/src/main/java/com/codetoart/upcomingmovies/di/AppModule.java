@@ -1,5 +1,6 @@
-package com.codetoart.upcomingmovies;
+package com.codetoart.upcomingmovies.di;
 
+import com.codetoart.upcomingmovies.MainApplication;
 import com.codetoart.upcomingmovies.presenter.MainActivityPresenter;
 import com.codetoart.upcomingmovies.presenter.MainActivityPresenterImpl;
 import com.codetoart.upcomingmovies.rest.TmdbApiV3;
@@ -34,7 +35,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public MainActivityPresenter provideMainActicityPresenter() {
+    public MainActivityPresenter provideMainActivityPresenter() {
         return new MainActivityPresenterImpl(mainApplication);
     }
 

@@ -2,6 +2,10 @@ package com.codetoart.upcomingmovies;
 
 import android.app.Application;
 
+import com.codetoart.upcomingmovies.di.AppComponent;
+import com.codetoart.upcomingmovies.di.AppModule;
+import com.codetoart.upcomingmovies.di.DaggerAppComponent;
+
 /**
  * Created by Hrishikesh Kadam on 23/03/2018
  */
